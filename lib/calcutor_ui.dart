@@ -1,8 +1,5 @@
-import 'dart:ffi';
 import 'dart:ui';
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/container.dart';
-
 class calcutor_ui_home extends StatefulWidget {
   const calcutor_ui_home({Key? key}) : super(key: key);
 
@@ -11,50 +8,105 @@ class calcutor_ui_home extends StatefulWidget {
 }
 
 class _calcutor_ui_homeState extends State<calcutor_ui_home> {
-  String num = "";
-  String num1 = '';
-  String num2 = '';
+   String opr = "";
+  String peropr = "";
+  double num1 = 0;
+  double num2 = 0;
   String result = '';
   String fnialresult = "";
   String text = '';
+
+  ////////////
   String sum() {
-    text = num1;
-    setState(() {
-      text = "";
-    });
-    text = num2;
-    setState(() {
-      text = "";
-    });
-    fnialresult = num1 + num2;
-    return fnialresult;
+    result = (num1 + num2).toString();
+    return result;
   }
 
+  String sub() {
+    result = (num1 - num2).toString();
+    return result;
+  }
+
+  String mul() {
+    result = (num1 * num2).toString();
+    return result;
+  }
+
+  String div() {
+    result = (num1 / num2).toString();
+    return result;
+  }
+
+///////////////////////////////////////////////////////////////////////////////////
   void clacutor(String Btext) {
     if (Btext == "C" || Btext == "AC") {
       setState(() {
-        num = "";
-        num1 = "";
-        num2 = "";
+        num1 = 0;
+        num2 = 0;
         result = "";
         fnialresult = "";
-        text = "";
+        text = '';
       });
-    } else if (Btext == "+" ||
-        Btext == "-" ||
-        Btext == "X" ||
-        Btext == "/" ||
-        Btext == "=" ||
-        Btext == "%" ||
-        Btext == "+/-") {
-      //do
+    } else if (opr == '=' && Btext == '=') {
+      switch (peropr) {
+        case '+':
+          fnialresult = sum();
+          break;
+        case '-':
+          fnialresult = sub();
+
+          break;
+        case 'X':
+          fnialresult = mul();
+
+          break;
+        case '/':
+          fnialresult = div();
+
+          break;
+      }
+    } else if (Btext == '+' ||
+        Btext == '-' ||
+        Btext == '/' ||
+        Btext == 'X' ||
+        Btext == '=') {
+      if (num1 == 0) {
+        num1 = double.parse(result);
+      } else {
+        num2 = double.parse(result);
+      }
+
+      switch (opr) {
+        case '+':
+          fnialresult = sum();
+          break;
+        case '-':
+          fnialresult = sub();
+          break;
+        case 'X':
+          fnialresult = mul();
+          break;
+        case '/':
+          fnialresult = div();
+          break;
+      }
+      peropr = opr;
+      opr = Btext;
+      setState(() {
+        result = '';
+      });
     } else {
       result = result + Btext;
       fnialresult = result;
       setState(() {
+        //fnialresult = result;
         text = fnialresult;
       });
     }
+    setState(() {
+      //fnialresult = result;
+      text = fnialresult;
+    });
   }
 
   Widget button(btext, Color btextcolor) {
@@ -82,8 +134,11 @@ class _calcutor_ui_homeState extends State<calcutor_ui_home> {
     );
   }
 
+  
+
   @override
   Widget build(BuildContext context) {
+    // TODO: implement build
     return Scaffold(
       body: Stack(
         children: [
@@ -94,27 +149,13 @@ class _calcutor_ui_homeState extends State<calcutor_ui_home> {
             child: Column(
               children: [
                 Container(
-                  padding: EdgeInsets.only(top: 110),
                   alignment: Alignment.centerRight,
-                  width: double.infinity,
-                  child: Text(
-                    "",
-                    maxLines: 1,
-                    textAlign: TextAlign.right,
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 30,
-                    ),
-                  ),
-                ),
-                Container(
-                  alignment: Alignment.centerRight,
-                  padding: EdgeInsets.only(bottom: 135),
+                  padding: EdgeInsets.only(top: 135),
                   width: double.infinity,
                   child: Text(
                     text,
-                    maxLines: 1,
                     textAlign: TextAlign.right,
+                    maxLines: 2,
                     style: TextStyle(
                       color: Colors.white,
                       fontSize: 60,
@@ -135,7 +176,7 @@ class _calcutor_ui_homeState extends State<calcutor_ui_home> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    button(
+                   button(
                       "AC",
                       Color(0xff26e1c0),
                     ),
@@ -156,10 +197,22 @@ class _calcutor_ui_homeState extends State<calcutor_ui_home> {
                 Row(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: [
-                    button("7", Color(0xfffafafa)),
-                    button("8", Color(0xfffafafa)),
-                    button("9", Color(0xfffafafa)),
-                    button("X", Color(0xffec6666)),
+                    button(
+                      "7",
+                      Color(0xfffafafa),
+                    ),
+                    button(
+                      "8",
+                      Color(0xfffafafa),
+                    ),
+                    button(
+                      "9",
+                      Color(0xfffafafa),
+                    ),
+                    button(
+                      "X",
+                      Color(0xffec6666),
+                    ),
                   ],
                 ),
                 Row(
